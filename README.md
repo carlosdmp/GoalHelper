@@ -13,6 +13,8 @@ Because we are already in 2019, c'mon
 * ViewModel
 * Fragment
 * Layout
+### Koin
+Really simple and efficient dependency injection, after dealing with Dagger I'm really happy to use this instead
 
 ## Next work (todos of the todo app)
 * Explore jetpack foundation components
