@@ -13,6 +13,7 @@ Because we are already in 2019, c'mon
 * ViewModel
 * Fragment
 * Layout
+* Animations
 ### Koin
 Really simple and efficient dependency injection, after dealing with Dagger I'm really happy to use this instead, but this project is also really small so I don't have a winner yet.
 
@@ -26,7 +27,7 @@ Note: This is a prototype, I'm still learning about some things that I'm using h
 * Explore jetpack lifecycle and paging components
 * Research WorkManager vs Coroutines
 * Insert out-of-the-app functionality (notifications, slices, share, ...)
-* Improve animations and design
+* Improve the design
 
 ## Wanna say something?
 Every review is welcome :)

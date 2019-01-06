@@ -1,3 +1,3 @@
 package apps.cdmp.goalhelper.bindmodel
 
-data class FormField(var value: String, var error: String?)
+data class FormField<T>(var value: T, var error: String? = null)

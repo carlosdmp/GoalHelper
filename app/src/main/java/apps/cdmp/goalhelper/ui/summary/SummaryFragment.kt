@@ -32,16 +32,16 @@ class SummaryFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        summaryViewModel.goals.observe(this, Observer {
-            it.fold({
+        summaryViewModel.goals.observe(this, Observer { goalListResource ->
+            goalListResource.fold({ goalList ->
                 binding.message.text = when {
-                    it == null || it.isEmpty() -> "No goals"
-                    else -> it.joinToString { it.description }
+                    goalList.isEmpty() -> "No goals"
+                    else -> goalList.joinToString { it.description }
                 }
                 binding.message
-            }, {
-                println(it)
-                binding.message.text = it.throwable.message ?: "no msg"
+            }, {error ->
+                println(error)
+                binding.message.text = error.throwable.message ?: "no msg"
             }, {
                 println("loading")
                 binding.message.text = "loading"
