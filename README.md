@@ -14,7 +14,11 @@ Because we are already in 2019, c'mon
 * Fragment
 * Layout
 ### Koin
-Really simple and efficient dependency injection, after dealing with Dagger I'm really happy to use this instead
+Really simple and efficient dependency injection, after dealing with Dagger I'm really happy to use this instead, but this project is also really small so I don't have a winner yet.
+
+__
+
+Note: This is a prototype, I'm still learning about some things that I'm using here
 
 ## Next work (todos of the todo app)
 * Explore jetpack foundation components
