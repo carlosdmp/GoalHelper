@@ -21,6 +21,7 @@ __
 Note: This is a prototype, I'm still learning about some things that I'm using here
 
 ## Next work (todos of the todo app)
+* Achieve a minimum functional app [Work in progress]
 * Explore jetpack foundation components
 * Explore jetpack lifecycle and paging components
 * Research WorkManager vs Coroutines
