@@ -13,17 +13,25 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
 import apps.cdmp.goalHelper.databinding.AddGoalFragmentBinding
+import apps.cdmp.goalhelper.bindmodel.addgoal.AddGoal
 import apps.cdmp.goalhelper.bindmodel.addgoal.FrequencyMeasure
 import apps.cdmp.goalhelper.common.Tuple3
 import apps.cdmp.goalhelper.common.onTextChanged
+import apps.cdmp.goalhelper.ui.MainFragment
+import apps.cdmp.goalhelper.ui.summary.SummaryFragmentDirections
 import org.koin.android.viewmodel.ext.android.viewModel
+import java.util.*
 
-class AddGoalFragment : Fragment() {
+class AddGoalFragment : Fragment(), MainFragment {
+
+    var addGoal: AddGoal? = null
 
     lateinit var binding: AddGoalFragmentBinding
     lateinit var selectorMap: MutableMap<View, Tuple3<View, Boolean, View>>
 
+    private val calendar by lazy { Calendar.getInstance() }
     var isFabVisible = false
 
     private object Constants {
@@ -38,12 +46,21 @@ class AddGoalFragment : Fragment() {
 
     private val viewModel: AddGoalViewModel by viewModel()
 
+    override fun onFabClicked() {
+        val goal = addGoal
+        if (goal != null && goal.name.isOk) {
+            viewModel.addGoal(goal)
+            binding.etName.findNavController().navigate(SummaryFragmentDirections.actionSummaryFragmentToAddgoalFragment())
+        } else if (goal != null) {
+            binding.etName.error = goal.name.error
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = AddGoalFragmentBinding.inflate(inflater, container, false)
-        //    binding.fabDone.setOnClickListener { hideFab() }
         binding.etName.onTextChanged { viewModel.updateName(it) }
         selectorMap = mutableMapOf(
             binding.bDeadline as View to
@@ -64,10 +81,16 @@ class AddGoalFragment : Fragment() {
                 expandLine(button)
             }
         }
+
+        binding.tpDeadline.minDate = calendar.timeInMillis
+
+//        binding.tpDeadline.setOnDateChangedListener { view, year, monthOfYear, dayOfMonth ->
+//            viewModel.setDate(calendar.time)
+//        }
         binding.spFreq.adapter = object : ArrayAdapter<String>(
             context,
             android.R.layout.simple_spinner_item,
-            FrequencyMeasure.values().map { it.display }){
+            FrequencyMeasure.values().map { it.display }) {
 
         }
         return binding.root
@@ -76,82 +99,12 @@ class AddGoalFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel.newGoal.observe(this, Observer {
-            binding.etName.error = it.name.error
-            if (it.name.error == null) {
-                //    showFab()
-            } else {
-                //  hideFab()
+            addGoal = it
+            if (it.name.isOk) {
+                binding.etName.error = null
             }
         })
     }
-
-//    private fun showFab() {
-//        if (!isFabVisible) {
-//            ObjectAnimator.ofFloat(
-//                binding.fabDone,
-//                "translationY",
-//                Constants.fabTranslation.second,
-//                Constants.fabTranslation.first
-//            ).apply {
-//                duration = Constants.fabAnimationDuration
-//                interpolator = AccelerateDecelerateInterpolator()
-//                addListener(object : AnimatorListenerAdapter() {
-//                    override fun onAnimationEnd(animation: Animator?) {
-//                        super.onAnimationEnd(animation)
-//                        binding.fabDone.isClickable = true
-//                        binding.fabDone.isFocusable = true
-//                        isFabVisible = true
-//                    }
-//                })
-//                start()
-//            }
-//            ObjectAnimator.ofFloat(
-//                binding.fabDone, "alpha",
-//                Constants.fabAlpha.second,
-//                Constants.fabAlpha.first
-//            ).apply {
-//                duration = Constants.fabAnimationDuration
-//                start()
-//            }
-//        }
-
-//    }
-
-//    private fun hideFab() {
-//        if (isFabVisible) {
-//            ObjectAnimator.ofFloat(
-//                binding.fabDone,
-//                "translationY",
-//                Constants.fabTranslation.first,
-//                Constants.fabTranslation.second
-//            ).apply {
-//                duration = Constants.fabAnimationDuration
-//                interpolator = AccelerateDecelerateInterpolator()
-//                addListener(object : AnimatorListenerAdapter() {
-//                    override fun onAnimationStart(animation: Animator?) {
-//                        super.onAnimationStart(animation)
-//                        binding.fabDone.isClickable = false
-//                        binding.fabDone.isFocusable = false
-//                    }
-//
-//                    override fun onAnimationEnd(animation: Animator?) {
-//                        super.onAnimationEnd(animation)
-//                        isFabVisible = false
-//                    }
-//                })
-//                start()
-//            }
-//            ObjectAnimator.ofFloat(
-//                binding.fabDone,
-//                "alpha",
-//                Constants.fabAlpha.first,
-//                Constants.fabAlpha.second
-//            ).apply {
-//                duration = Constants.fabAnimationDuration
-//                start()
-//            }
-//        }
-//    }
 
     private fun expandLine(view: View) {
         val line = selectorMap[view]

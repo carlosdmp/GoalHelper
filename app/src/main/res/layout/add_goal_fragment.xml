@@ -75,7 +75,6 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <DatePicker
-                    android:visibility="gone"
                     android:id="@+id/tp_deadline"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

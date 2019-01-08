@@ -36,6 +36,11 @@ class SummaryFragment : Fragment(), MainFragment{
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+    }
+
+    override fun onResume() {
+        super.onResume()
         summaryViewModel.goals.observe(this, Observer { goalListResource ->
             goalListResource.fold({ goalList ->
                 binding.message.text = when {
@@ -52,5 +57,4 @@ class SummaryFragment : Fragment(), MainFragment{
             })
         })
     }
-
 }
