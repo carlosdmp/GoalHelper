@@ -4,23 +4,25 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
 import android.os.Bundle
-import android.provider.SyncStateContract
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import apps.cdmp.goalHelper.databinding.AddGoalFragmentBinding
-import apps.cdmp.goalhelper.common.Tuple
-import apps.cdmp.goalhelper.common.and
+import apps.cdmp.goalhelper.bindmodel.addgoal.FrequencyMeasure
+import apps.cdmp.goalhelper.common.Tuple3
 import apps.cdmp.goalhelper.common.onTextChanged
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class AddGoalFragment : Fragment() {
 
     lateinit var binding: AddGoalFragmentBinding
-    lateinit var selectorMap: MutableMap<View, Tuple<View, Boolean>>
+    lateinit var selectorMap: MutableMap<View, Tuple3<View, Boolean, View>>
 
     var isFabVisible = false
 
@@ -41,10 +43,17 @@ class AddGoalFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = AddGoalFragmentBinding.inflate(inflater, container, false)
-        binding.fabDone.setOnClickListener { hideFab() }
+        //    binding.fabDone.setOnClickListener { hideFab() }
         binding.etName.onTextChanged { viewModel.updateName(it) }
         selectorMap = mutableMapOf(
-            binding.bDeadline to (binding.hDeadline and false), binding.bRoutine to (binding.hRoutine and false)
+            binding.bDeadline as View to
+                    Tuple3(
+                        binding.hDeadline, false, binding.tpDeadline as View
+                    ),
+            binding.bRoutine as View to
+                    Tuple3(
+                        binding.hRoutine, false, binding.lRoutine as View
+                    )
         )
         expandLine(binding.bDeadline)
         listOf(
@@ -55,90 +64,94 @@ class AddGoalFragment : Fragment() {
                 expandLine(button)
             }
         }
+        binding.spFreq.adapter = object : ArrayAdapter<String>(
+            context,
+            android.R.layout.simple_spinner_item,
+            FrequencyMeasure.values().map { it.display }){
+
+        }
         return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        binding.fabDone.translationY = Constants.fabTranslation.second
-        binding.fabDone.alpha = Constants.fabAlpha.second
         viewModel.newGoal.observe(this, Observer {
             binding.etName.error = it.name.error
             if (it.name.error == null) {
-                showFab()
+                //    showFab()
             } else {
-                hideFab()
+                //  hideFab()
             }
         })
     }
 
-    private fun showFab() {
-        if (!isFabVisible) {
-            ObjectAnimator.ofFloat(
-                binding.fabDone,
-                "translationY",
-                Constants.fabTranslation.second,
-                Constants.fabTranslation.first
-            ).apply {
-                duration = Constants.fabAnimationDuration
-                interpolator = AccelerateDecelerateInterpolator()
-                addListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator?) {
-                        super.onAnimationEnd(animation)
-                        binding.fabDone.isClickable = true
-                        binding.fabDone.isFocusable = true
-                        isFabVisible = true
-                    }
-                })
-                start()
-            }
-            ObjectAnimator.ofFloat(
-                binding.fabDone, "alpha",
-                Constants.fabAlpha.second,
-                Constants.fabAlpha.first
-            ).apply {
-                duration = Constants.fabAnimationDuration
-                start()
-            }
-        }
+//    private fun showFab() {
+//        if (!isFabVisible) {
+//            ObjectAnimator.ofFloat(
+//                binding.fabDone,
+//                "translationY",
+//                Constants.fabTranslation.second,
+//                Constants.fabTranslation.first
+//            ).apply {
+//                duration = Constants.fabAnimationDuration
+//                interpolator = AccelerateDecelerateInterpolator()
+//                addListener(object : AnimatorListenerAdapter() {
+//                    override fun onAnimationEnd(animation: Animator?) {
+//                        super.onAnimationEnd(animation)
+//                        binding.fabDone.isClickable = true
+//                        binding.fabDone.isFocusable = true
+//                        isFabVisible = true
+//                    }
+//                })
+//                start()
+//            }
+//            ObjectAnimator.ofFloat(
+//                binding.fabDone, "alpha",
+//                Constants.fabAlpha.second,
+//                Constants.fabAlpha.first
+//            ).apply {
+//                duration = Constants.fabAnimationDuration
+//                start()
+//            }
+//        }
 
-    }
+//    }
 
-    private fun hideFab() {
-        if (isFabVisible) {
-            ObjectAnimator.ofFloat(
-                binding.fabDone,
-                "translationY",
-                Constants.fabTranslation.first,
-                Constants.fabTranslation.second
-            ).apply {
-                duration = Constants.fabAnimationDuration
-                interpolator = AccelerateDecelerateInterpolator()
-                addListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationStart(animation: Animator?) {
-                        super.onAnimationStart(animation)
-                        binding.fabDone.isClickable = false
-                        binding.fabDone.isFocusable = false
-                    }
-
-                    override fun onAnimationEnd(animation: Animator?) {
-                        super.onAnimationEnd(animation)
-                        isFabVisible = false
-                    }
-                })
-                start()
-            }
-            ObjectAnimator.ofFloat(
-                binding.fabDone,
-                "alpha",
-                Constants.fabAlpha.first,
-                Constants.fabAlpha.second
-            ).apply {
-                duration = Constants.fabAnimationDuration
-                start()
-            }
-        }
-    }
+//    private fun hideFab() {
+//        if (isFabVisible) {
+//            ObjectAnimator.ofFloat(
+//                binding.fabDone,
+//                "translationY",
+//                Constants.fabTranslation.first,
+//                Constants.fabTranslation.second
+//            ).apply {
+//                duration = Constants.fabAnimationDuration
+//                interpolator = AccelerateDecelerateInterpolator()
+//                addListener(object : AnimatorListenerAdapter() {
+//                    override fun onAnimationStart(animation: Animator?) {
+//                        super.onAnimationStart(animation)
+//                        binding.fabDone.isClickable = false
+//                        binding.fabDone.isFocusable = false
+//                    }
+//
+//                    override fun onAnimationEnd(animation: Animator?) {
+//                        super.onAnimationEnd(animation)
+//                        isFabVisible = false
+//                    }
+//                })
+//                start()
+//            }
+//            ObjectAnimator.ofFloat(
+//                binding.fabDone,
+//                "alpha",
+//                Constants.fabAlpha.first,
+//                Constants.fabAlpha.second
+//            ).apply {
+//                duration = Constants.fabAnimationDuration
+//                start()
+//            }
+//        }
+//    }
 
     private fun expandLine(view: View) {
         val line = selectorMap[view]
@@ -155,6 +168,12 @@ class AddGoalFragment : Fragment() {
                     override fun onAnimationStart(animation: Animator?) {
                         super.onAnimationStart(animation)
                         line.second = true
+                        line.third.visibility = VISIBLE
+                        selectorMap.keys.forEach { v ->
+                            if (v != view) {
+                                selectorMap[v]?.third?.visibility = GONE
+                            }
+                        }
                     }
 
                     override fun onAnimationEnd(animation: Animator?) {

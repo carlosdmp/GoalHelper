@@ -9,9 +9,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import apps.cdmp.goalHelper.databinding.SummaryFragmentBinding
+import apps.cdmp.goalhelper.ui.MainFragment
 import org.koin.android.viewmodel.ext.android.viewModel
 
-class SummaryFragment : Fragment() {
+class SummaryFragment : Fragment(), MainFragment{
+
+
     lateinit var binding: SummaryFragmentBinding
     val summaryViewModel: SummaryViewModel by viewModel()
 
@@ -19,14 +22,15 @@ class SummaryFragment : Fragment() {
         fun newInstance() = SummaryFragment()
     }
 
+    override fun onFabClicked() {
+        binding.summary.findNavController().navigate(SummaryFragmentDirections.actionSummaryFragmentToAddgoalFragment())
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = SummaryFragmentBinding.inflate(inflater, container, false)
-        binding.fabAdd.setOnClickListener { view ->
-            view.findNavController().navigate(SummaryFragmentDirections.actionSummaryFragmentToAddgoalFragment())
-        }
         return binding.root
     }
 
