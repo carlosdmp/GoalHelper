@@ -1,4 +1,4 @@
-package apps.cdmp.goalhelper
+package apps.cdmp.goalhelper.ui.main
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.NavDestination
+import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -17,10 +17,13 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import apps.cdmp.goalHelper.R
 import apps.cdmp.goalHelper.databinding.MainActivityBinding
-import apps.cdmp.goalhelper.ui.MainFragment
+import apps.cdmp.goalhelper.bindmodel.main.MainButtonLogo
+import org.koin.android.viewmodel.ext.android.viewModel
 
 
 class MainActivity : AppCompatActivity() {
+
+    val mainViewModel: MainViewModel by viewModel()
 
     private val fab
         get() = binding.fab
@@ -47,34 +50,6 @@ class MainActivity : AppCompatActivity() {
     private val navController by lazy { Navigation.findNavController(this, R.id.main_nav_fragment) }
     private val appBarConfiguration by lazy { AppBarConfiguration(navController.graph, drawerLayout) }
 
-    private val onFabAction = {
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.main_nav_fragment)
-        val fragment = navHostFragment?.childFragmentManager?.fragments?.get(0)
-        when (fragment) {
-            is MainFragment -> fragment.onFabClicked()
-            else -> {
-            }
-        }
-    }
-
-    private val onNavigate: (destination: NavDestination) -> Unit = { destination ->
-        when (destination.id) {
-            R.id.summary_fragment -> {
-                hideFab(onEnd = {
-                    binding.fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_add_black_24dp))
-                    showFab()
-                })
-
-            }
-            R.id.addgoal_fragment -> {
-                hideFab(onEnd = {
-                    binding.fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_done_black_24dp))
-                    showFab()
-                })
-            }
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -82,10 +57,28 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
-        // Set up navigation menu
+
         binding.navigationView.setupWithNavController(navController)
-        binding.fab.setOnClickListener { onFabAction() }
-        navController.addOnDestinationChangedListener { _, destination, _ -> onNavigate(destination) }
+
+        isFabOn = false
+        mainViewModel.mainHost.observe(this, Observer { host ->
+            hideFab(onEnd = {
+                binding.fab.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        this,
+                        when (host.logo) {
+                            MainButtonLogo.ADD -> R.drawable.ic_add_black_24dp
+                            MainButtonLogo.DONE -> R.drawable.ic_done_black_24dp
+                            MainButtonLogo.HIDDEN -> R.drawable.abc_btn_check_material
+                        }
+                    )
+                )
+                if (host.logo != MainButtonLogo.HIDDEN){
+                    showFab()
+                    binding.fab.setOnClickListener { host.onClick() }
+                }
+            })
+        })
     }
 
     override fun onSupportNavigateUp(): Boolean {

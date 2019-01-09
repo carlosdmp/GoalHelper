@@ -15,6 +15,6 @@ data class Goal(
     var id: Int = 0
 
     object Creator {
-        fun create(addGoal: AddGoal) = Goal(addGoal.name.value, false)
+        fun create(addGoal: AddGoal) = Goal(addGoal.name, false)
     }
 }

@@ -9,28 +9,33 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import apps.cdmp.goalHelper.databinding.SummaryFragmentBinding
-import apps.cdmp.goalhelper.ui.MainFragment
+import apps.cdmp.goalhelper.bindmodel.main.MainButtonLogo
+import apps.cdmp.goalhelper.bindmodel.main.MainHost
+import apps.cdmp.goalhelper.ui.main.MainViewModel
+import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 
-class SummaryFragment : Fragment(), MainFragment{
+class SummaryFragment : Fragment() {
 
 
     lateinit var binding: SummaryFragmentBinding
     val summaryViewModel: SummaryViewModel by viewModel()
+    val mainViewModel: MainViewModel by sharedViewModel()
 
     companion object {
         fun newInstance() = SummaryFragment()
     }
 
-    override fun onFabClicked() {
-        binding.summary.findNavController().navigate(SummaryFragmentDirections.actionSummaryFragmentToAddgoalFragment())
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = SummaryFragmentBinding.inflate(inflater, container, false)
+        mainViewModel.showFab(MainButtonLogo.ADD) {
+            binding.summary.findNavController()
+                .navigate(SummaryFragmentDirections.actionSummaryFragmentToAddgoalFragment())
+        }
         return binding.root
     }
 
@@ -48,7 +53,7 @@ class SummaryFragment : Fragment(), MainFragment{
                     else -> goalList.joinToString { it.description }
                 }
                 binding.message
-            }, {error ->
+            }, { error ->
                 println(error)
                 binding.message.text = error.throwable.message ?: "no msg"
             }, {

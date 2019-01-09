@@ -13,21 +13,20 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.navigation.findNavController
 import apps.cdmp.goalHelper.databinding.AddGoalFragmentBinding
 import apps.cdmp.goalhelper.bindmodel.addgoal.AddGoal
 import apps.cdmp.goalhelper.bindmodel.addgoal.FrequencyMeasure
+import apps.cdmp.goalhelper.bindmodel.main.MainButtonLogo
 import apps.cdmp.goalhelper.common.Tuple3
 import apps.cdmp.goalhelper.common.onTextChanged
-import apps.cdmp.goalhelper.ui.MainFragment
-import apps.cdmp.goalhelper.ui.summary.SummaryFragmentDirections
+import apps.cdmp.goalhelper.ui.main.MainViewModel
+import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 import java.util.*
 
-class AddGoalFragment : Fragment(), MainFragment {
+class AddGoalFragment : Fragment() {
 
     var addGoal: AddGoal? = null
-
     lateinit var binding: AddGoalFragmentBinding
     lateinit var selectorMap: MutableMap<View, Tuple3<View, Boolean, View>>
 
@@ -45,16 +44,7 @@ class AddGoalFragment : Fragment(), MainFragment {
     }
 
     private val viewModel: AddGoalViewModel by viewModel()
-
-    override fun onFabClicked() {
-        val goal = addGoal
-        if (goal != null && goal.name.isOk) {
-            viewModel.addGoal(goal)
-            binding.etName.findNavController().navigate(SummaryFragmentDirections.actionSummaryFragmentToAddgoalFragment())
-        } else if (goal != null) {
-            binding.etName.error = goal.name.error
-        }
-    }
+    val mainViewModel: MainViewModel by sharedViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -93,6 +83,7 @@ class AddGoalFragment : Fragment(), MainFragment {
             FrequencyMeasure.values().map { it.display }) {
 
         }
+        mainViewModel.showFab(MainButtonLogo.DONE, {})
         return binding.root
     }
 
@@ -100,9 +91,9 @@ class AddGoalFragment : Fragment(), MainFragment {
         super.onActivityCreated(savedInstanceState)
         viewModel.newGoal.observe(this, Observer {
             addGoal = it
-            if (it.name.isOk) {
-                binding.etName.error = null
-            }
+        })
+        viewModel.errors.observe(this, Observer {
+            binding.errors = it
         })
     }
 
