@@ -1,10 +1,22 @@
 package apps.cdmp.goalhelper.bindmodel.addgoal
 
-import apps.cdmp.goalhelper.bindmodel.FormField
 import java.util.*
 
-data class AddGoal(var name: FormField<String>, var validated: Boolean, var deadline : Date?, var isDeadline: Boolean = true)
-data class AddGoalError()
+data class AddGoal(
+    var name: String,
+    var deadline: Date?,
+    var isDeadline: Boolean = true
+) {
+    fun getFormErrors() = AddGoalError(
+        nameError = name.isEmpty()
+    )
+}
+
+data class AddGoalError(var nameError: Boolean = false) {
+    val isOk
+        get() = !nameError
+}
+
 enum class FrequencyMeasure(val display: String) {
     HOURS("h"),
     MINUTES("min"),
