@@ -6,7 +6,7 @@
 
     <fragment
             android:id="@+id/summary_fragment"
-            android:name="apps.cdmp.goalhelper.ui.summary.SummaryFragment"
+            android:name="apps.cdmp.goalhelper.presentation.ui.summary.SummaryFragment"
             android:label="@string/my_objectives_title"
             tools:layout="@layout/summary_fragment">
 
@@ -22,7 +22,7 @@
 
     <fragment
             android:id="@+id/addgoal_fragment"
-            android:name="apps.cdmp.goalhelper.ui.addgoal.AddGoalFragment"
+            android:name="apps.cdmp.goalhelper.presentation.ui.addgoal.AddGoalFragment"
             android:label="Add a goal"
             tools:layout="@layout/add_goal_fragment">
 

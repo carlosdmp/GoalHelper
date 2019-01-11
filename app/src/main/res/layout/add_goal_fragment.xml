@@ -4,11 +4,11 @@
 
         <variable
                 name="form"
-                type="apps.cdmp.goalhelper.bindmodel.addgoal.AddGoalForm"/>
+                type="apps.cdmp.goalhelper.presentation.ui.addgoal.bindmodel.AddGoalForm"/>
 
         <variable
                 name="errors"
-                type="apps.cdmp.goalhelper.bindmodel.addgoal.AddGoalValidation"/>
+                type="apps.cdmp.goalhelper.presentation.ui.addgoal.bindmodel.AddGoalValidation"/>
     </data>
     <ScrollView
             android:id="@+id/root"

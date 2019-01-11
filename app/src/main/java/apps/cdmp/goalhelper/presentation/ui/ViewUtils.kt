@@ -1,4 +1,4 @@
-package apps.cdmp.goalhelper.common
+package apps.cdmp.goalhelper.presentation.ui
 
 import android.text.Editable
 import android.text.TextWatcher

@@ -4,6 +4,10 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'androidx.navigation.safeargs'
 
+kapt {
+    correctErrorTypes = true
+}
+
 android {
     compileSdkVersion rootProject.compileSdkVersion
     defaultConfig {
@@ -46,6 +50,9 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$rootProject.coroutinesVersion"
     implementation "org.koin:koin-android:$rootProject.koinVersion"
     implementation "org.koin:koin-android-viewmodel:$rootProject.koinVersion"
+    implementation "com.airbnb.android:epoxy:$rootProject.epoxyVersion"
+    kapt "com.airbnb.android:epoxy-processor:$rootProject.epoxyVersion"
+
     // Testing dependencies
     androidTestImplementation "androidx.arch.core:core-testing:$rootProject.coreTestingVersion"
     androidTestImplementation "androidx.test.espresso:espresso-contrib:$rootProject.espressoVersion"
