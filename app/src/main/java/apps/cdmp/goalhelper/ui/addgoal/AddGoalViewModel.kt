@@ -4,37 +4,66 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import apps.cdmp.goalhelper.bindmodel.addgoal.AddGoal
-import apps.cdmp.goalhelper.bindmodel.addgoal.AddGoalError
+import apps.cdmp.goalhelper.bindmodel.addgoal.AddGoalForm
+import apps.cdmp.goalhelper.bindmodel.addgoal.AddGoalValidation
 import apps.cdmp.goalhelper.common.default
 import apps.cdmp.goalhelper.data.model.Goal
 import apps.cdmp.goalhelper.data.repository.GoalsRepo
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import java.util.*
 
 class AddGoalViewModel(private val goalsRepo: GoalsRepo) : ViewModel() {
 
-    val newGoal: MutableLiveData<AddGoal> = MutableLiveData<AddGoal>().default(AddGoal(name = "", deadline = null))
-    val errors: LiveData<AddGoalError> = Transformations.map(newGoal) { i -> AddGoalError(i.name.isEmpty()) }
+    private val viewModelJob = Job()
+    private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    private fun modifyGoal(f: AddGoal.() -> Unit) {
-        newGoal.value?.let(f)
-        newGoal.postValue(newGoal.value)
+    private var goalForm = AddGoalForm(name = "", deadline = null)
+
+    val liveForm: MutableLiveData<AddGoalForm> =
+        MutableLiveData<AddGoalForm>().default(goalForm)
+    val formValidation: LiveData<AddGoalValidation> =
+        Transformations.map(liveForm) { i -> AddGoalValidation(i.name.isEmpty()) }
+
+    private fun modifyGoal(f: (AddGoalForm) -> AddGoalForm) {
+        goalForm = goalForm.let(f)
+        liveForm.value = goalForm
     }
-
 
     fun updateName(newName: String) {
         modifyGoal {
-            name = newName
+            it.copy(name = newName, nameError = null, done = false)
         }
     }
 
-    fun setDate(date: Date) {
+    private fun updateNameError(newNameError: String) {
         modifyGoal {
-            deadline = date
+            it.copy(nameError = newNameError, done = false)
         }
     }
 
-    fun addGoal(addGoal: AddGoal) {
-        goalsRepo.addGoal(Goal.Creator.create(addGoal))
+    fun updateDate(newDate: Date) {
+        modifyGoal {
+            it.copy(deadline = newDate, done = false)
+        }
     }
+
+    fun addGoal() {
+        if (formValidation.value?.isOk == true) {
+            uiScope.launch(Dispatchers.IO) {
+                goalsRepo.addGoal(Goal.Creator.create(goalForm))
+            }
+            modifyGoal { it.copy(done = true)}
+        } else {
+            updateNameError("You must set a name")
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        viewModelJob.cancel()
+    }
+
 }

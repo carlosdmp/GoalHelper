@@ -7,8 +7,8 @@ import apps.cdmp.goalhelper.bindmodel.main.MainHost
 
 class MainViewModel : ViewModel() {
     val mainHost = MutableLiveData<MainHost>()
-    fun showFab(logo: MainButtonLogo, onClick: () -> Unit) {
-        mainHost.value = MainHost(logo, onClick)
+    fun showFab(logo: MainButtonLogo) {
+        mainHost.value = MainHost(logo)
     }
 
     fun hideFab() {

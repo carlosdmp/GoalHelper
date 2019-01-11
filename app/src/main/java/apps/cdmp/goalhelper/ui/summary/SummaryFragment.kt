@@ -10,38 +10,33 @@ import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import apps.cdmp.goalHelper.databinding.SummaryFragmentBinding
 import apps.cdmp.goalhelper.bindmodel.main.MainButtonLogo
-import apps.cdmp.goalhelper.bindmodel.main.MainHost
+import apps.cdmp.goalhelper.ui.main.MainHosted
 import apps.cdmp.goalhelper.ui.main.MainViewModel
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 
-class SummaryFragment : Fragment() {
+class SummaryFragment : Fragment(), MainHosted {
 
-
-    lateinit var binding: SummaryFragmentBinding
-    val summaryViewModel: SummaryViewModel by viewModel()
-    val mainViewModel: MainViewModel by sharedViewModel()
-
-    companion object {
-        fun newInstance() = SummaryFragment()
+    override fun onFabClick() {
+        binding.summary.findNavController()
+            .navigate(SummaryFragmentDirections.actionSummaryFragmentToAddgoalFragment())
     }
 
+    private lateinit var binding: SummaryFragmentBinding
+    private val summaryViewModel: SummaryViewModel by viewModel()
+    private val mainViewModel: MainViewModel by sharedViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = SummaryFragmentBinding.inflate(inflater, container, false)
-        mainViewModel.showFab(MainButtonLogo.ADD) {
-            binding.summary.findNavController()
-                .navigate(SummaryFragmentDirections.actionSummaryFragmentToAddgoalFragment())
-        }
         return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
+        mainViewModel.showFab(MainButtonLogo.DONE)
     }
 
     override fun onResume() {
@@ -58,7 +53,7 @@ class SummaryFragment : Fragment() {
                 binding.message.text = error.throwable.message ?: "no msg"
             }, {
                 println("loading")
-                binding.message.text = "loading"
+                binding.message.text = "Loading"
             })
         })
     }
