@@ -11,7 +11,7 @@ import apps.cdmp.goalhelper.data.repository.GoalsRepo
 class SummaryViewModel(private val goalsRepo: GoalsRepo) : ViewModel() {
 
     val goals: LiveData<Resource<List<Goal>>> =
-        Transformations.map(goalsRepo.getObjectives()) { dbGoals ->
+        Transformations.map(goalsRepo.getGoals()) { dbGoals ->
             successWith(dbGoals)
         }
 }

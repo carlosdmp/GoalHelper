@@ -13,5 +13,8 @@ interface GoalDao {
     fun getGoals(): LiveData<List<Goal>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(plants: List<Goal>)
+    fun insert(goal : Goal)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAll(goals: List<Goal>)
 }

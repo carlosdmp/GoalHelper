@@ -9,44 +9,52 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import apps.cdmp.goalHelper.databinding.SummaryFragmentBinding
+import apps.cdmp.goalhelper.bindmodel.main.MainButtonLogo
+import apps.cdmp.goalhelper.ui.main.MainHosted
+import apps.cdmp.goalhelper.ui.main.MainViewModel
+import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 
-class SummaryFragment : Fragment() {
-    lateinit var binding: SummaryFragmentBinding
-    val summaryViewModel: SummaryViewModel by viewModel()
+class SummaryFragment : Fragment(), MainHosted {
 
-    companion object {
-        fun newInstance() = SummaryFragment()
+    override fun onFabClick() {
+        binding.summary.findNavController()
+            .navigate(SummaryFragmentDirections.actionSummaryFragmentToAddgoalFragment())
     }
+
+    private lateinit var binding: SummaryFragmentBinding
+    private val summaryViewModel: SummaryViewModel by viewModel()
+    private val mainViewModel: MainViewModel by sharedViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = SummaryFragmentBinding.inflate(inflater, container, false)
-        binding.fabAdd.setOnClickListener { view ->
-            view.findNavController().navigate(SummaryFragmentDirections.actionSummaryFragmentToAddgoalFragment())
-        }
         return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        summaryViewModel.goals.observe(this, Observer {
-            it.fold({
+        mainViewModel.showFab(MainButtonLogo.DONE)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        summaryViewModel.goals.observe(this, Observer { goalListResource ->
+            goalListResource.fold({ goalList ->
                 binding.message.text = when {
-                    it == null || it.isEmpty() -> "No goals"
-                    else -> it.joinToString { it.description }
+                    goalList.isEmpty() -> "No goals"
+                    else -> goalList.joinToString { it.description }
                 }
                 binding.message
-            }, {
-                println(it)
-                binding.message.text = it.throwable.message ?: "no msg"
+            }, { error ->
+                println(error)
+                binding.message.text = error.throwable.message ?: "no msg"
             }, {
                 println("loading")
-                binding.message.text = "loading"
+                binding.message.text = "Loading"
             })
         })
     }
-
 }
