@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import apps.cdmp.goalHelper.databinding.SummaryFragmentBinding
+import apps.cdmp.goalhelper.presentation.epoxy.summaryItemHolder
 import apps.cdmp.goalhelper.presentation.ui.main.MainButtonLogo
 import apps.cdmp.goalhelper.presentation.ui.main.MainHosted
 import apps.cdmp.goalhelper.presentation.ui.main.MainViewModel
@@ -38,15 +39,18 @@ class SummaryFragment : Fragment(), MainHosted {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         mainViewModel.showFab(MainButtonLogo.DONE)
-//        binding.summaryRecyclerView.withModels {
-//            SummaryItemBindingModel_()
-//        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        summaryViewModel.goals.observe(this, Observer { goalListResource ->
-
+        summaryViewModel.summaryGoals.observe(this, Observer { goals ->
+            binding.summaryRecyclerView.withModels {
+                goals.forEachIndexed { index, summaryItem ->
+                    summaryItemHolder {
+                        id(index)
+                        name(summaryItem.name)
+                    }
+                }
+            }
+        })
+        summaryViewModel.loading.observe(this, Observer { isLoading ->
+            binding.loading = isLoading
         })
     }
 }
