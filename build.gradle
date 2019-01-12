@@ -29,6 +29,7 @@ buildscript {
         uiAutomatorVersion = '2.2.0-alpha4'
         workVersion = '1.0.0-beta01'
         koinVersion = '1.0.2'
+        epoxyVersion = '3.0.0'
     }
 
     repositories {

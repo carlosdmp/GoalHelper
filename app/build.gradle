@@ -4,6 +4,10 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'androidx.navigation.safeargs'
 
+kapt {
+    correctErrorTypes = true
+}
+
 android {
     compileSdkVersion rootProject.compileSdkVersion
     defaultConfig {
@@ -14,6 +18,17 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary true
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                includeCompileClasspath false
+            }
+        }
+
+        compileOptions {
+            sourceCompatibility 1.8
+            targetCompatibility 1.8
+        }
     }
     buildTypes {
         release {
@@ -46,6 +61,12 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$rootProject.coroutinesVersion"
     implementation "org.koin:koin-android:$rootProject.koinVersion"
     implementation "org.koin:koin-android-viewmodel:$rootProject.koinVersion"
+    implementation "com.airbnb.android:epoxy:$rootProject.epoxyVersion"
+    implementation "com.airbnb.android:epoxy-databinding:$rootProject.epoxyVersion"
+    kapt "com.airbnb.android:epoxy-processor:$rootProject.epoxyVersion"
+    implementation "com.airbnb.android:epoxy-processor:$rootProject.epoxyVersion"
+
+
     // Testing dependencies
     androidTestImplementation "androidx.arch.core:core-testing:$rootProject.coreTestingVersion"
     androidTestImplementation "androidx.test.espresso:espresso-contrib:$rootProject.espressoVersion"

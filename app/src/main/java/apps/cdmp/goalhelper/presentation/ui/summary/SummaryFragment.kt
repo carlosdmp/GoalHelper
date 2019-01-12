@@ -1,4 +1,4 @@
-package apps.cdmp.goalhelper.ui.summary
+package apps.cdmp.goalhelper.presentation.ui.summary
 
 
 import android.os.Bundle
@@ -9,9 +9,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import apps.cdmp.goalHelper.databinding.SummaryFragmentBinding
-import apps.cdmp.goalhelper.bindmodel.main.MainButtonLogo
-import apps.cdmp.goalhelper.ui.main.MainHosted
-import apps.cdmp.goalhelper.ui.main.MainViewModel
+import apps.cdmp.goalhelper.presentation.epoxy.summaryItemHolder
+import apps.cdmp.goalhelper.presentation.ui.main.MainButtonLogo
+import apps.cdmp.goalhelper.presentation.ui.main.MainHosted
+import apps.cdmp.goalhelper.presentation.ui.main.MainViewModel
+import apps.cdmp.goalhelper.presentation.ui.withModels
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -37,24 +39,18 @@ class SummaryFragment : Fragment(), MainHosted {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         mainViewModel.showFab(MainButtonLogo.DONE)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        summaryViewModel.goals.observe(this, Observer { goalListResource ->
-            goalListResource.fold({ goalList ->
-                binding.message.text = when {
-                    goalList.isEmpty() -> "No goals"
-                    else -> goalList.joinToString { it.description }
+        summaryViewModel.summaryGoals.observe(this, Observer { goals ->
+            binding.summaryRecyclerView.withModels {
+                goals.forEachIndexed { index, summaryItem ->
+                    summaryItemHolder {
+                        id(index)
+                        name(summaryItem.name)
+                    }
                 }
-                binding.message
-            }, { error ->
-                println(error)
-                binding.message.text = error.throwable.message ?: "no msg"
-            }, {
-                println("loading")
-                binding.message.text = "Loading"
-            })
+            }
+        })
+        summaryViewModel.loading.observe(this, Observer { isLoading ->
+            binding.loading = isLoading
         })
     }
 }

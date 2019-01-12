@@ -1,23 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable name="loading" type="Boolean"/>
+    </data>
     <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/summary"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-    android:background="@color/teal_50">
-
-
-        <TextView
-                android:id="@+id/message"
+            android:background="@color/teal_50">
+        <ProgressBar
+                app:isVisible="@{loading}"
+                style="?android:attr/progressBarStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="SummaryFragment"
-                android:textColor="@color/teal_300"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:id="@+id/progressBar" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+                app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"/>
+        <com.airbnb.epoxy.EpoxyRecyclerView
+                android:id="@+id/summary_recycler_view"
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

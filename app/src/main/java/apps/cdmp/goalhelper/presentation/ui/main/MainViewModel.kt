@@ -1,9 +1,7 @@
-package apps.cdmp.goalhelper.ui.main
+package apps.cdmp.goalhelper.presentation.ui.main
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import apps.cdmp.goalhelper.bindmodel.main.MainButtonLogo
-import apps.cdmp.goalhelper.bindmodel.main.MainHost
 
 class MainViewModel : ViewModel() {
     val mainHost = MutableLiveData<MainHost>()
