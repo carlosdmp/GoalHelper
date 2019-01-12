@@ -1,12 +1,12 @@
-package apps.cdmp.goalhelper.ui.addgoal
+package apps.cdmp.goalhelper.presentation.ui.addgoal
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import apps.cdmp.goalhelper.bindmodel.addgoal.AddGoalForm
-import apps.cdmp.goalhelper.bindmodel.addgoal.AddGoalValidation
-import apps.cdmp.goalhelper.common.default
+import apps.cdmp.goalhelper.presentation.ui.addgoal.bindmodel.AddGoalForm
+import apps.cdmp.goalhelper.presentation.ui.addgoal.bindmodel.AddGoalValidation
+import apps.cdmp.goalhelper.presentation.ui.default
 import apps.cdmp.goalhelper.data.model.Goal
 import apps.cdmp.goalhelper.data.repository.GoalsRepo
 import kotlinx.coroutines.CoroutineScope
@@ -20,7 +20,8 @@ class AddGoalViewModel(private val goalsRepo: GoalsRepo) : ViewModel() {
     private val viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    private var goalForm = AddGoalForm(name = "", deadline = null)
+    private var goalForm =
+        AddGoalForm(name = "", deadline = null)
 
     val liveForm: MutableLiveData<AddGoalForm> =
         MutableLiveData<AddGoalForm>().default(goalForm)

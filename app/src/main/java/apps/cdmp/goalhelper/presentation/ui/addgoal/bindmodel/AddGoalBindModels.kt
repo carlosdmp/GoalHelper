@@ -1,4 +1,4 @@
-package apps.cdmp.goalhelper.bindmodel.addgoal
+package apps.cdmp.goalhelper.presentation.ui.addgoal.bindmodel
 
 import java.util.*
 

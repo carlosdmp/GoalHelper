@@ -3,8 +3,11 @@ package apps.cdmp.goalhelper.presentation.ui
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.widget.Checkable
 import android.widget.EditText
 import androidx.databinding.BindingAdapter
+import com.airbnb.epoxy.EpoxyController
+import com.airbnb.epoxy.EpoxyRecyclerView
 
 
 fun EditText.onTextChanged(listener: (String) -> Unit) {
@@ -23,6 +26,14 @@ fun EditText.onTextChanged(listener: (String) -> Unit) {
     })
 }
 
+fun EpoxyRecyclerView.withModels(buildModelsCallback: EpoxyController.() -> Unit) {
+    setControllerAndBuildModels(object : EpoxyController() {
+        override fun buildModels() {
+            buildModelsCallback()
+        }
+    })
+}
+
 @BindingAdapter("isVisible")
 fun bindIsVisible(view: View, isVisible: Boolean) {
     view.visibility = if (isVisible) {
@@ -37,3 +48,10 @@ fun bindIsGone(view: View, isGone: Boolean) {
     bindIsVisible(view, !isGone)
 }
 
+@BindingAdapter("isChecked")
+fun bindIsChecked(view: View, isChecked: Boolean) {
+    when (view) {
+        is Checkable -> view.isChecked = isChecked
+    }
+
+}

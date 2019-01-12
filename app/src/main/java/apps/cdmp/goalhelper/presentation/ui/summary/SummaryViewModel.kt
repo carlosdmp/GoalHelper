@@ -1,4 +1,4 @@
-package apps.cdmp.goalhelper.ui.summary
+package apps.cdmp.goalhelper.presentation.ui.summary
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations

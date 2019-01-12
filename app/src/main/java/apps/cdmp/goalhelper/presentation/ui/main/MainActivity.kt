@@ -1,4 +1,4 @@
-package apps.cdmp.goalhelper.ui.main
+package apps.cdmp.goalhelper.presentation.ui.main
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -18,7 +18,6 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import apps.cdmp.goalHelper.R
 import apps.cdmp.goalHelper.databinding.MainActivityBinding
-import apps.cdmp.goalhelper.bindmodel.main.MainButtonLogo
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
