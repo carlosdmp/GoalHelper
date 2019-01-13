@@ -15,7 +15,9 @@ Because we are already in 2019, c'mon
 
 ### Koin
 Really simple and efficient dependency injection, after dealing with Dagger I'm really happy to use this instead, but this project is also really small so I don't have a winner yet.
-
+### Epoxy
+Recycler views easier than ever
+https://github.com/airbnb/epoxy
 __
 
 Note: This is a toy project, I'm still learning about some things that I'm using here
