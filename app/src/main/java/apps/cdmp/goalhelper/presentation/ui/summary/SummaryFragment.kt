@@ -41,10 +41,26 @@ class SummaryFragment : Fragment(), MainHosted {
         mainViewModel.showFab(MainButtonLogo.DONE)
         summaryViewModel.summaryGoals.observe(this, Observer { goals ->
             binding.summaryRecyclerView.withModels {
-                goals.forEachIndexed { index, summaryItem ->
+                goals.undoneItems.forEachIndexed { index, summaryItem ->
                     summaryItemHolder {
-                        id(index)
+                        id("done $index")
                         name(summaryItem.name)
+                        deadline(summaryItem.deadline)
+                        isDone(summaryItem.isDone)
+                        onDoneClick { _, _, _, _ ->
+                            summaryItem.onClickDone()
+                        }
+                    }
+                }
+                goals.doneItems.forEachIndexed { index, summaryItem ->
+                    summaryItemHolder {
+                        id("done $index")
+                        name(summaryItem.name)
+                        deadline(summaryItem.deadline)
+                        isDone(summaryItem.isDone)
+                        onDoneClick { _, _, _, _ ->
+                            summaryItem.onClickDone()
+                        }
                     }
                 }
             }
