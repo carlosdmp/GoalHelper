@@ -1,11 +1,13 @@
 package apps.cdmp.goalhelper.presentation.ui.summary
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import apps.cdmp.goalhelper.common.*
 import apps.cdmp.goalhelper.data.model.Goal
 import apps.cdmp.goalhelper.data.repository.GoalsRepo
+import apps.cdmp.goalhelper.presentation.ui.default
 import apps.cdmp.goalhelper.presentation.ui.summary.bindmodel.SummaryItem
 import apps.cdmp.goalhelper.presentation.ui.summary.bindmodel.SummaryList
 import kotlinx.coroutines.CoroutineScope
@@ -21,10 +23,8 @@ class SummaryViewModel(private val goalsRepo: GoalsRepo) : ViewModel() {
 
     private val todayDate = Calendar.getInstance().time
 
-    private val goals: LiveData<Resource<List<Goal>>> =
-        Transformations.map(goalsRepo.getGoals()) { dbGoals ->
-            successWith(dbGoals)
-        }
+    private val goals: MutableLiveData<Resource<List<Goal>>> = MutableLiveData<Resource<List<Goal>>>()
+        .default(stillLoading())
 
     val summaryGoals: LiveData<SummaryList> =
         Transformations.map(goals) { dbGoals ->
@@ -34,6 +34,7 @@ class SummaryViewModel(private val goalsRepo: GoalsRepo) : ViewModel() {
                         undoneHeader = "Undone",
                         undoneItems = dbGoals.data.filter { !it.isDone }.map {
                             SummaryItem(
+                                id = it.id,
                                 name = it.description,
                                 deadline = todayDate remainingTo it.deadline,
                                 isDone = it.isDone,
@@ -43,6 +44,7 @@ class SummaryViewModel(private val goalsRepo: GoalsRepo) : ViewModel() {
                         doneHeader = "Done",
                         doneItems = dbGoals.data.filter { it.isDone }.map {
                             SummaryItem(
+                                id = it.id,
                                 name = it.description,
                                 deadline = todayDate remainingTo it.deadline,
                                 isDone = it.isDone,
@@ -64,7 +66,23 @@ class SummaryViewModel(private val goalsRepo: GoalsRepo) : ViewModel() {
     private fun updateGoal(id: Int, done: Boolean) {
         print("called")
         uiScope.launch(Dispatchers.IO) {
+            goals.value?.let {
+                it.fold(onData = { data ->
+                    data.find { it.id == id }?.let {
+                        it.isDone = !it.isDone
+                    }
+                })
+            }
+            goals.postValue(goals.value)
             goalsRepo.updateGoal(id, done)
+        }
+    }
+
+    fun loadGoals() {
+        uiScope.launch(Dispatchers.IO) {
+            goals.postValue(stillLoading())
+            val dbGoals = goalsRepo.getGoals()
+            goals.postValue(successWith(dbGoals))
         }
     }
 }

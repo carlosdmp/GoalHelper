@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit
 
 
 var dateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH)
-fun doNothing() = {}
+fun doNothing() {}
 
 const val gregorianCalendarOffset = 1900
 

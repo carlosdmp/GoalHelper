@@ -3,7 +3,7 @@ package apps.cdmp.goalhelper.common
 data class Error(val throwable: Throwable, val customMessage: String? = null)
 
 sealed class Resource<T> {
-    inline fun fold(onData: (T) -> Unit, onError: (Error) -> Unit, onLoading: () -> Unit) {
+    inline fun fold(onData: (T) -> Unit = {}, onError: (Error) -> Unit = {}, onLoading: () -> Unit = {}) {
         when (this) {
             is Success -> onData(data)
             is Failure -> onError(error)

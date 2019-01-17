@@ -11,6 +11,7 @@ import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -97,6 +98,13 @@ class MainActivity : AppCompatActivity() {
                 }
             })
         })
+        navController.addOnDestinationChangedListener{ _,_,_ ->
+            currentFragment?.let { fragment ->
+                when (fragment) {
+                    is MainHosted -> fragment.onNavigationLanded()
+                }
+            }
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

@@ -24,6 +24,9 @@ class SummaryFragment : Fragment(), MainHosted {
             .navigate(SummaryFragmentDirections.actionSummaryFragmentToAddgoalFragment())
     }
 
+    override fun onNavigationLanded() {
+        summaryViewModel.loadGoals()
+    }
     private lateinit var binding: SummaryFragmentBinding
     private val summaryViewModel: SummaryViewModel by viewModel()
     private val mainViewModel: MainViewModel by sharedViewModel()
@@ -41,9 +44,9 @@ class SummaryFragment : Fragment(), MainHosted {
         mainViewModel.showFab(MainButtonLogo.DONE)
         summaryViewModel.summaryGoals.observe(this, Observer { goals ->
             binding.summaryRecyclerView.withModels {
-                goals.undoneItems.forEachIndexed { index, summaryItem ->
+                goals.undoneItems.forEach { summaryItem ->
                     summaryItemHolder {
-                        id("done $index")
+                        id(summaryItem.id)
                         name(summaryItem.name)
                         deadline(summaryItem.deadline)
                         isDone(summaryItem.isDone)
@@ -52,9 +55,9 @@ class SummaryFragment : Fragment(), MainHosted {
                         }
                     }
                 }
-                goals.doneItems.forEachIndexed { index, summaryItem ->
+                goals.doneItems.forEach { summaryItem ->
                     summaryItemHolder {
-                        id("done $index")
+                        id(summaryItem.id)
                         name(summaryItem.name)
                         deadline(summaryItem.deadline)
                         isDone(summaryItem.isDone)

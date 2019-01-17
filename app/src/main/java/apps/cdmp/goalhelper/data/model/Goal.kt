@@ -10,7 +10,7 @@ import java.util.*
 data class Goal(
     val description: String,
     val deadline : Date,
-    val isDone: Boolean
+    var isDone: Boolean
 ) {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")

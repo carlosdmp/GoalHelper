@@ -18,7 +18,7 @@ abstract class SummaryItemHolder : EpoxyModelWithHolder<Holder>() {
     lateinit var deadline: String
     @EpoxyAttribute
     open var isDone: Boolean = false
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var onDoneClick: View.OnClickListener? = null
 
     override fun bind(holder: Holder) {

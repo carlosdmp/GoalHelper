@@ -7,4 +7,4 @@ data class SummaryList(
     val doneItems: List<SummaryItem>
 )
 
-data class SummaryItem(val name: String, val deadline: String, val isDone: Boolean, val onClickDone: () -> Unit)
+data class SummaryItem(val id: Int, val name: String, val deadline: String, val isDone: Boolean, val onClickDone: () -> Unit)

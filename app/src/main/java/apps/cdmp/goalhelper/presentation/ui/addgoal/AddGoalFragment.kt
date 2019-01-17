@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import apps.cdmp.goalHelper.databinding.AddGoalFragmentBinding
+import apps.cdmp.goalhelper.common.doNothing
 import apps.cdmp.goalhelper.common.gregorianCalendarOffset
 import apps.cdmp.goalhelper.presentation.ui.main.MainButtonLogo
 import apps.cdmp.goalhelper.presentation.ui.main.MainHosted
@@ -22,6 +23,10 @@ class AddGoalFragment : Fragment(), MainHosted {
 
     override fun onFabClick() {
         viewModel.addGoal()
+    }
+
+    override fun onNavigationLanded() {
+        doNothing()
     }
 
     private lateinit var binding: AddGoalFragmentBinding
