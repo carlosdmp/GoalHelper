@@ -10,10 +10,7 @@ import apps.cdmp.goalhelper.data.repository.GoalsRepo
 import apps.cdmp.goalhelper.presentation.ui.default
 import apps.cdmp.goalhelper.presentation.ui.summary.bindmodel.SummaryItem
 import apps.cdmp.goalhelper.presentation.ui.summary.bindmodel.SummaryList
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.util.*
 
 class SummaryViewModel(private val goalsRepo: GoalsRepo) : ViewModel() {
@@ -66,15 +63,9 @@ class SummaryViewModel(private val goalsRepo: GoalsRepo) : ViewModel() {
     private fun updateGoal(id: Int, done: Boolean) {
         print("called")
         uiScope.launch(Dispatchers.IO) {
-            goals.value?.let {
-                it.fold(onData = { data ->
-                    data.find { it.id == id }?.let {
-                        it.isDone = !it.isDone
-                    }
-                })
-            }
-            goals.postValue(goals.value)
             goalsRepo.updateGoal(id, done)
+            delay(350)
+            loadGoals()
         }
     }
 

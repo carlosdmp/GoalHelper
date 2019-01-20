@@ -27,6 +27,7 @@ class SummaryFragment : Fragment(), MainHosted {
     override fun onNavigationLanded() {
         summaryViewModel.loadGoals()
     }
+
     private lateinit var binding: SummaryFragmentBinding
     private val summaryViewModel: SummaryViewModel by viewModel()
     private val mainViewModel: MainViewModel by sharedViewModel()
@@ -71,5 +72,6 @@ class SummaryFragment : Fragment(), MainHosted {
         summaryViewModel.loading.observe(this, Observer { isLoading ->
             binding.loading = isLoading
         })
+        summaryViewModel.loadGoals()
     }
 }
