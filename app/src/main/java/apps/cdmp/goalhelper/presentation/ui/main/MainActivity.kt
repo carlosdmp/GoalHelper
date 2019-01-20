@@ -23,7 +23,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
 
-    val mainViewModel: MainViewModel by viewModel()
+    private val mainViewModel: MainViewModel by viewModel()
 
     private val fab
         get() = binding.fab
@@ -37,7 +37,8 @@ class MainActivity : AppCompatActivity() {
     private val currentFragment: Fragment?
         get() {
             val navHostFragment = supportFragmentManager.findFragmentById(R.id.main_nav_fragment)
-            return navHostFragment?.childFragmentManager?.fragments?.get(0)
+            val fragmentList = navHostFragment?.childFragmentManager?.fragments ?: listOf(null)
+            return if (fragmentList.isNotEmpty()) fragmentList[0] else null
         }
 
     private object AnimConstants {
@@ -97,6 +98,9 @@ class MainActivity : AppCompatActivity() {
                 }
             })
         })
+        navController.addOnDestinationChangedListener { _, _, _ ->
+
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

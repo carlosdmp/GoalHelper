@@ -24,6 +24,10 @@ class SummaryFragment : Fragment(), MainHosted {
             .navigate(SummaryFragmentDirections.actionSummaryFragmentToAddgoalFragment())
     }
 
+    override fun onNavigationLanded() {
+        summaryViewModel.loadGoals()
+    }
+
     private lateinit var binding: SummaryFragmentBinding
     private val summaryViewModel: SummaryViewModel by viewModel()
     private val mainViewModel: MainViewModel by sharedViewModel()
@@ -41,10 +45,26 @@ class SummaryFragment : Fragment(), MainHosted {
         mainViewModel.showFab(MainButtonLogo.DONE)
         summaryViewModel.summaryGoals.observe(this, Observer { goals ->
             binding.summaryRecyclerView.withModels {
-                goals.forEachIndexed { index, summaryItem ->
+                goals.undoneItems.forEach { summaryItem ->
                     summaryItemHolder {
-                        id(index)
+                        id(summaryItem.id)
                         name(summaryItem.name)
+                        deadline(summaryItem.deadline)
+                        isDone(summaryItem.isDone)
+                        onDoneClick { _, _, _, _ ->
+                            summaryItem.onClickDone()
+                        }
+                    }
+                }
+                goals.doneItems.forEach { summaryItem ->
+                    summaryItemHolder {
+                        id(summaryItem.id)
+                        name(summaryItem.name)
+                        deadline(summaryItem.deadline)
+                        isDone(summaryItem.isDone)
+                        onDoneClick { _, _, _, _ ->
+                            summaryItem.onClickDone()
+                        }
                     }
                 }
             }
@@ -52,5 +72,6 @@ class SummaryFragment : Fragment(), MainHosted {
         summaryViewModel.loading.observe(this, Observer { isLoading ->
             binding.loading = isLoading
         })
+        summaryViewModel.loadGoals()
     }
 }
