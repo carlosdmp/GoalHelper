@@ -6,8 +6,6 @@ import android.view.View
 import android.widget.Checkable
 import android.widget.EditText
 import androidx.databinding.BindingAdapter
-import com.airbnb.epoxy.EpoxyController
-import com.airbnb.epoxy.EpoxyRecyclerView
 
 
 fun EditText.onTextChanged(listener: (String) -> Unit) {
@@ -22,14 +20,6 @@ fun EditText.onTextChanged(listener: (String) -> Unit) {
 
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             // do nothing
-        }
-    })
-}
-
-fun EpoxyRecyclerView.withModels(buildModelsCallback: EpoxyController.() -> Unit) {
-    setControllerAndBuildModels(object : EpoxyController() {
-        override fun buildModels() {
-            buildModelsCallback()
         }
     })
 }

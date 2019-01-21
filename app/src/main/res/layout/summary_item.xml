@@ -33,7 +33,7 @@
                 android:layout_height="19dp"
                 android:textColor="@color/teal_300"
                 tools:text="2 days"
-                android:text="@{name}"
+                android:text="@{deadline}"
                 app:layout_constraintStart_toStartOf="@+id/tv_name"
                 app:layout_constraintTop_toBottomOf="@id/tv_name"
                 app:layout_constraintBottom_toBottomOf="parent"

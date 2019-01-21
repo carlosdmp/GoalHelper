@@ -8,8 +8,8 @@ import apps.cdmp.goalhelper.common.*
 import apps.cdmp.goalhelper.data.model.Goal
 import apps.cdmp.goalhelper.data.repository.GoalsRepo
 import apps.cdmp.goalhelper.presentation.ui.default
-import apps.cdmp.goalhelper.presentation.ui.summary.bindmodel.SummaryItem
-import apps.cdmp.goalhelper.presentation.ui.summary.bindmodel.SummaryList
+import apps.cdmp.goalhelper.presentation.ui.summary.uimodel.SummaryItemUI
+import apps.cdmp.goalhelper.presentation.ui.summary.uimodel.SummaryListUI
 import kotlinx.coroutines.*
 import java.util.*
 
@@ -23,14 +23,14 @@ class SummaryViewModel(private val goalsRepo: GoalsRepo) : ViewModel() {
     private val goals: MutableLiveData<Resource<List<Goal>>> = MutableLiveData<Resource<List<Goal>>>()
         .default(stillLoading())
 
-    val summaryGoals: LiveData<SummaryList> =
+    val summaryGoalsUI: LiveData<SummaryListUI> =
         Transformations.map(goals) { dbGoals ->
             when (dbGoals) {
                 is Success ->
-                    SummaryList(
+                    SummaryListUI(
                         undoneHeader = "Undone",
-                        undoneItems = dbGoals.data.filter { !it.isDone }.map {
-                            SummaryItem(
+                        undoneItemUIS = dbGoals.data.filter { !it.isDone }.map {
+                            SummaryItemUI(
                                 id = it.id,
                                 name = it.description,
                                 deadline = todayDate remainingTo it.deadline,
@@ -39,8 +39,8 @@ class SummaryViewModel(private val goalsRepo: GoalsRepo) : ViewModel() {
                             )
                         },
                         doneHeader = "Done",
-                        doneItems = dbGoals.data.filter { it.isDone }.map {
-                            SummaryItem(
+                        doneItemUIS = dbGoals.data.filter { it.isDone }.map {
+                            SummaryItemUI(
                                 id = it.id,
                                 name = it.description,
                                 deadline = todayDate remainingTo it.deadline,
@@ -48,7 +48,7 @@ class SummaryViewModel(private val goalsRepo: GoalsRepo) : ViewModel() {
                                 onClickDone = { updateGoal(it.id, !it.isDone) }
                             )
                         })
-                else -> SummaryList("", emptyList(), "", emptyList())
+                else -> SummaryListUI("", emptyList(), "", emptyList())
             }
         }
 

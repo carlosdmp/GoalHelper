@@ -42,7 +42,7 @@ android {
 }
 
 dependencies {
-
+    implementation project(':diffrecycler')
     implementation 'androidx.legacy:legacy-support-v4:1.0.0-alpha1'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0-alpha1'
     kapt "androidx.room:room-compiler:$rootProject.roomVersion"
@@ -61,10 +61,10 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$rootProject.coroutinesVersion"
     implementation "org.koin:koin-android:$rootProject.koinVersion"
     implementation "org.koin:koin-android-viewmodel:$rootProject.koinVersion"
-    implementation "com.airbnb.android:epoxy:$rootProject.epoxyVersion"
-    implementation "com.airbnb.android:epoxy-databinding:$rootProject.epoxyVersion"
-    kapt "com.airbnb.android:epoxy-processor:$rootProject.epoxyVersion"
-    implementation "com.airbnb.android:epoxy-processor:$rootProject.epoxyVersion"
+//    implementation "com.airbnb.android:epoxy:$rootProject.epoxyVersion"
+//    implementation "com.airbnb.android:epoxy-databinding:$rootProject.epoxyVersion"
+//    kapt "com.airbnb.android:epoxy-processor:$rootProject.epoxyVersion"
+//    implementation "com.airbnb.android:epoxy-processor:$rootProject.epoxyVersion"
 
 
     // Testing dependencies

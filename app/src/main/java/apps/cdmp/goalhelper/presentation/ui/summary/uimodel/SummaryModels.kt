@@ -1,10 +1,25 @@
-package apps.cdmp.goalhelper.presentation.ui.summary.bindmodel
+package apps.cdmp.goalhelper.presentation.ui.summary.uimodel
 
-data class SummaryList(
+import apps.cdmp.diffrecycler.DiffModel
+
+data class SummaryListUI(
     val undoneHeader: String,
-    val undoneItems: List<SummaryItem>,
+    val undoneItemUIS: List<SummaryItemUI>,
     val doneHeader: String,
-    val doneItems: List<SummaryItem>
+    val doneItemUIS: List<SummaryItemUI>
 )
 
-data class SummaryItem(val id: Int, val name: String, val deadline: String, val isDone: Boolean, val onClickDone: () -> Unit)
+data class SummaryItemUI(
+    val id: Int,
+    val name: String,
+    val deadline: String,
+    val isDone: Boolean,
+    val onClickDone: () -> Unit
+) : DiffModel<SummaryItemUI> {
+    override fun areItemsTheSame(other: SummaryItemUI): Boolean = id == other.id
+
+    override fun areContentsTheSame(other: SummaryItemUI): Boolean = equals(other)
+
+    override fun clone(): SummaryItemUI = copy()
+
+}
