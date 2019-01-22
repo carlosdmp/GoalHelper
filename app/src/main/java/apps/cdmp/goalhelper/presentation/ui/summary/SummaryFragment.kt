@@ -8,16 +8,20 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
 import apps.cdmp.goalHelper.databinding.SummaryFragmentBinding
-import apps.cdmp.goalhelper.presentation.epoxy.summaryItemHolder
 import apps.cdmp.goalhelper.presentation.ui.main.MainButtonLogo
 import apps.cdmp.goalhelper.presentation.ui.main.MainHosted
 import apps.cdmp.goalhelper.presentation.ui.main.MainViewModel
-import apps.cdmp.goalhelper.presentation.ui.withModels
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
+import apps.cdmp.goalhelper.presentation.ui.summary.adapter.SummaryAdapter
+
 
 class SummaryFragment : Fragment(), MainHosted {
+
+    private val summaryAdapter = SummaryAdapter()
 
     override fun onFabClick() {
         binding.summary.findNavController()
@@ -42,31 +46,11 @@ class SummaryFragment : Fragment(), MainHosted {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        initRecyclerView()
         mainViewModel.showFab(MainButtonLogo.DONE)
-        summaryViewModel.summaryGoals.observe(this, Observer { goals ->
-            binding.summaryRecyclerView.withModels {
-                goals.undoneItems.forEach { summaryItem ->
-                    summaryItemHolder {
-                        id(summaryItem.id)
-                        name(summaryItem.name)
-                        deadline(summaryItem.deadline)
-                        isDone(summaryItem.isDone)
-                        onDoneClick { _, _, _, _ ->
-                            summaryItem.onClickDone()
-                        }
-                    }
-                }
-                goals.doneItems.forEach { summaryItem ->
-                    summaryItemHolder {
-                        id(summaryItem.id)
-                        name(summaryItem.name)
-                        deadline(summaryItem.deadline)
-                        isDone(summaryItem.isDone)
-                        onDoneClick { _, _, _, _ ->
-                            summaryItem.onClickDone()
-                        }
-                    }
-                }
+        summaryViewModel.summaryGoalsUI.observe(this, Observer { goals ->
+            goals?.let {
+                summaryAdapter.updateListItems(goals.undoneItemUIS + goals.doneItemUIS)
             }
         })
         summaryViewModel.loading.observe(this, Observer { isLoading ->
@@ -74,4 +58,11 @@ class SummaryFragment : Fragment(), MainHosted {
         })
         summaryViewModel.loadGoals()
     }
+
+    private fun initRecyclerView() {
+        binding.summaryRecyclerView.layoutManager = LinearLayoutManager(context)
+        binding.summaryRecyclerView.itemAnimator = DefaultItemAnimator()
+        binding.summaryRecyclerView.adapter = summaryAdapter
+    }
+
 }

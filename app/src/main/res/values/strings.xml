@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">Goal achiever</string>
+    <string name="app_name">Goal helper</string>
     <string name="my_objectives_title">My goals</string>
-    <string name="navigation_drawer_header_title" translatable="false">Goal achiever</string>
+    <string name="navigation_drawer_header_title" translatable="false">Goal helper</string>
 
 </resources>

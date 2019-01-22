@@ -15,18 +15,16 @@ Because we are already in 2019, c'mon
 
 ### Koin
 Really simple and efficient dependency injection, after dealing with Dagger I'm really happy to use this instead, but this project is also really small so I don't have a winner yet.
-### Epoxy
-Recycler views easier than ever
-https://github.com/airbnb/epoxy
+### Diff Adapter
+Android module made by me with the idea of using diff Util to have efficient, beatiful and easy to create recycler views.
+It uses DiffUtil to diff between the old model list and the new one, and notify the adapter with the exact changes.
 __
 
-Note: This is a toy project, I'm still learning about some things that I'm using here
+Note: This is a toy project, I´m using all the new things I can, even if maybe the best choice was to use some already known thing.
 
 ## Next work (todos of the todo app)
-* Achieve a minimum functional app [Work in progress]
 * Explore jetpack foundation components
 * Explore jetpack paging
-* Research WorkManager vs Coroutines
 * Insert out-of-the-app functionality (notifications, slices, share, ...)
 * Improve the design
 
