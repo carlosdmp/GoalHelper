@@ -33,7 +33,7 @@ class SummaryViewModel(private val goalsRepo: GoalsRepo) : ViewModel() {
                             SummaryItemUI(
                                 id = it.id,
                                 name = it.description,
-                                deadline = todayDate remainingTo it.deadline,
+                                deadline = "Days remaining: " + (todayDate remainingTo it.deadline),
                                 isDone = it.isDone,
                                 onClickDone = { updateGoal(it.id, !it.isDone) }
                             )
@@ -43,7 +43,7 @@ class SummaryViewModel(private val goalsRepo: GoalsRepo) : ViewModel() {
                             SummaryItemUI(
                                 id = it.id,
                                 name = it.description,
-                                deadline = todayDate remainingTo it.deadline,
+                                deadline = "Days remaining: " + (todayDate remainingTo it.deadline),
                                 isDone = it.isDone,
                                 onClickDone = { updateGoal(it.id, !it.isDone) }
                             )
