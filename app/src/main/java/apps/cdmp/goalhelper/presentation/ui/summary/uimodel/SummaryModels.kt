@@ -1,6 +1,6 @@
 package apps.cdmp.goalhelper.presentation.ui.summary.uimodel
 
-import apps.cdmp.diffrecycler.DiffModel
+import apps.cdmp.diffadapter.DiffModelWithID
 
 data class SummaryListUI(
     val undoneHeader: String,
@@ -10,13 +10,12 @@ data class SummaryListUI(
 )
 
 data class SummaryItemUI(
-    val id: Int,
+    override val id: Int,
     val name: String,
     val deadline: String,
     val isDone: Boolean,
     val onClickDone: () -> Unit
-) : DiffModel<SummaryItemUI> {
-    override fun areItemsTheSame(other: SummaryItemUI): Boolean = id == other.id
+) : DiffModelWithID<SummaryItemUI, Int> {
 
     override fun areContentsTheSame(other: SummaryItemUI): Boolean = equals(other)
 

@@ -1,8 +1,8 @@
-package apps.cdmp.diffrecycler.diff
+package apps.cdmp.diffadapter.diff
 
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import apps.cdmp.diffrecycler.DiffModel
+import apps.cdmp.diffadapter.DiffModel
 
 abstract class DiffAdapter<VH : RecyclerView.ViewHolder, T : DiffModel<T>> : RecyclerView.Adapter<VH>() {
 

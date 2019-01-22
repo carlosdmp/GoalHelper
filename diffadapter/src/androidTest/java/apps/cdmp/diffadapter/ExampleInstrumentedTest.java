@@ -1,4 +1,4 @@
-package apps.cdmp.diffrecycler;
+package apps.cdmp.diffadapter;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

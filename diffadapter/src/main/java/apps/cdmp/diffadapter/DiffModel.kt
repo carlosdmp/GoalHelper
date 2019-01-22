@@ -1,4 +1,4 @@
-package apps.cdmp.diffrecycler
+package apps.cdmp.diffadapter
 
 interface DiffModel<T> where T : DiffModel<T> {
     fun areItemsTheSame(other: T): Boolean
@@ -6,7 +6,8 @@ interface DiffModel<T> where T : DiffModel<T> {
     fun clone() : T
 }
 
-interface DiffModelWithID<T, K> : DiffModel<T> where T : DiffModelWithID<T, K> {
+interface DiffModelWithID<T, K> :
+    DiffModel<T> where T : DiffModelWithID<T, K> {
     val id: K
     override fun areItemsTheSame(other: T) = id?.equals(other.id) == true
 }

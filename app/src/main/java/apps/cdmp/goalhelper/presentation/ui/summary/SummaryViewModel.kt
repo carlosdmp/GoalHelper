@@ -23,7 +23,7 @@ class SummaryViewModel(private val goalsRepo: GoalsRepo) : ViewModel() {
     private val goals: MutableLiveData<Resource<List<Goal>>> = MutableLiveData<Resource<List<Goal>>>()
         .default(stillLoading())
 
-    val summaryGoalsUI: LiveData<SummaryListUI> =
+    val summaryGoalsUI: LiveData<SummaryListUI?> =
         Transformations.map(goals) { dbGoals ->
             when (dbGoals) {
                 is Success ->
@@ -48,7 +48,7 @@ class SummaryViewModel(private val goalsRepo: GoalsRepo) : ViewModel() {
                                 onClickDone = { updateGoal(it.id, !it.isDone) }
                             )
                         })
-                else -> SummaryListUI("", emptyList(), "", emptyList())
+                else -> null
             }
         }
 
@@ -61,7 +61,6 @@ class SummaryViewModel(private val goalsRepo: GoalsRepo) : ViewModel() {
         }
 
     private fun updateGoal(id: Int, done: Boolean) {
-        print("called")
         uiScope.launch(Dispatchers.IO) {
             goalsRepo.updateGoal(id, done)
             delay(350)

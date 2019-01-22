@@ -1,4 +1,4 @@
-package apps.cdmp.diffrecycler;
+package apps.cdmp.diffadapter;
 
 import org.junit.Test;
 

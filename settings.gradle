@@ -1,1 +1,1 @@
-include ':app', ':diffrecycler'
+include ':app', ':diffadapter'

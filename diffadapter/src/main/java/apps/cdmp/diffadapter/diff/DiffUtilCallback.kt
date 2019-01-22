@@ -1,9 +1,9 @@
-package apps.cdmp.diffrecycler.diff
+package apps.cdmp.diffadapter.diff
 
 import android.os.Bundle
 import androidx.annotation.Nullable
 import androidx.recyclerview.widget.DiffUtil
-import apps.cdmp.diffrecycler.DiffModel
+import apps.cdmp.diffadapter.DiffModel
 
 
 class DiffUtilCallBack<T>(private var oldList: List<T>, private var newList: List<T>) : DiffUtil.Callback()
