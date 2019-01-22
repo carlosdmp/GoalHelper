@@ -54,7 +54,7 @@ class AddGoalViewModel(private val goalsRepo: GoalsRepo) : ViewModel() {
     fun addGoal() {
         if (formValidation.value?.isOk == true) {
             uiScope.launch(Dispatchers.IO) {
-                goalsRepo.addGoal(Goal.Creator.create(goalForm))
+              goalsRepo.addGoal(Goal.Creator.create(goalForm))
             }
             modifyGoal { it.copy(done = true)}
         } else {

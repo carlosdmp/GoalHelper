@@ -9,12 +9,12 @@ class GoalsRepo(private val goalDao: GoalDao) {
     fun getGoals() = goalDao.getGoals()
 
     @WorkerThread
-    suspend fun addGoal(goal: Goal) {
+    fun addGoal(goal: Goal) {
         goalDao.insert(goal)
     }
 
     @WorkerThread
-    suspend fun updateGoal(id: Int, isDone: Boolean) {
+    fun updateGoal(id: Int, isDone: Boolean) {
         goalDao.update(id, isDone)
     }
 
