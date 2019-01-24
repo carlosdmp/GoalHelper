@@ -48,7 +48,7 @@ class AddGoalFragment : Fragment(), MainHosted {
             minDate.day
         ) { _, year, monthOfYear, dayOfMonth ->
             val selected = GregorianCalendar.getInstance()
-            selected.set(year + gregorianCalendarOffset, monthOfYear, dayOfMonth)
+            selected.set(year, monthOfYear, dayOfMonth)
             viewModel.updateDate(selected.time)
         }
         binding.tpDeadline.minDate = minDate.time

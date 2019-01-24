@@ -18,7 +18,7 @@
                 app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"/>
-        <com.airbnb.epoxy.EpoxyRecyclerView
+        <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/summary_recycler_view"
                 android:orientation="vertical"
                 android:layout_width="0dp"
