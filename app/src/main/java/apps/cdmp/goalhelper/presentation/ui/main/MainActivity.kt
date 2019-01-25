@@ -60,10 +60,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Set up ActionBar
         setSupportActionBar(binding.toolbar)
         setupActionBarWithNavController(navController, appBarConfiguration)
-
 
         binding.navigationView.setupWithNavController(navController)
         fab.setOnClickListener {
@@ -89,7 +87,7 @@ class MainActivity : AppCompatActivity() {
                         binding.fab.setImageDrawable(
                             ContextCompat.getDrawable(
                                 this,
-                                R.drawable.ic_add_black_24dp
+                                R.drawable.ic_done_black_24dp
                             )
                         )
                         showFab()

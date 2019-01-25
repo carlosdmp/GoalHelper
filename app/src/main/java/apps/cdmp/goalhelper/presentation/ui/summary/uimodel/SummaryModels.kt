@@ -1,24 +1,39 @@
 package apps.cdmp.goalhelper.presentation.ui.summary.uimodel
 
-import apps.cdmp.diffadapter.DiffModelWithID
+import apps.cdmp.diffadapter.DiffModel
+import apps.cdmp.diffadapter.diff.CloneableModel
 
-data class SummaryListUI(
-    val undoneHeader: String,
-    val undoneItemUIS: List<SummaryItemUI>,
-    val doneHeader: String,
-    val doneItemUIS: List<SummaryItemUI>
-)
+sealed class SummaryUI : DiffModel<SummaryUI>, CloneableModel<SummaryUI> {
+
+    override fun clone(): SummaryUI =
+            when (this) {
+                is SummaryItemUI -> copy()
+                is SummaryHeaderUI -> copy()
+            }
+
+    override fun areItemsTheSame(other: SummaryUI): Boolean =
+            when {
+                this is SummaryItemUI && other is SummaryItemUI -> id == other.id
+                this is SummaryHeaderUI && other is SummaryHeaderUI -> header == other.header
+                else -> false
+            }
+
+    override fun areContentsTheSame(other: SummaryUI): Boolean =
+            when {
+                this is SummaryItemUI && other is SummaryItemUI -> equals(other)
+                this is SummaryHeaderUI && other is SummaryHeaderUI -> areItemsTheSame(other)
+                else -> false
+            }
+}
 
 data class SummaryItemUI(
-    override val id: Int,
-    val name: String,
-    val deadline: String,
-    val isDone: Boolean,
-    val onClickDone: () -> Unit
-) : DiffModelWithID<SummaryItemUI, Int> {
+        val id: Int,
+        val name: String,
+        val deadline: String,
+        val isDone: Boolean,
+        val onClickDone: () -> Unit
+) : SummaryUI()
 
-    override fun areContentsTheSame(other: SummaryItemUI): Boolean = equals(other)
+data class SummaryHeaderUI(val header: SummaryHeaderType) : SummaryUI()
 
-    override fun clone(): SummaryItemUI = copy()
-
-}
+enum class SummaryHeaderType { DONE, UNDONE }

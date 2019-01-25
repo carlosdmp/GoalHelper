@@ -2,33 +2,41 @@ package apps.cdmp.goalhelper.presentation.ui.summary.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
 import apps.cdmp.diffadapter.diff.DiffAdapter
+import apps.cdmp.goalHelper.databinding.SummaryHeaderBinding
 import apps.cdmp.goalHelper.databinding.SummaryItemBinding
+import apps.cdmp.goalhelper.presentation.ui.summary.mapper.UiMapper
 import apps.cdmp.goalhelper.presentation.ui.summary.uimodel.SummaryItemUI
+import apps.cdmp.goalhelper.presentation.ui.summary.uimodel.SummaryHeaderUI
+import apps.cdmp.goalhelper.presentation.ui.summary.uimodel.SummaryUI
 
-class SummaryAdapter(override var items: MutableList<SummaryItemUI> = mutableListOf()) :
-    DiffAdapter<SummaryAdapter.ViewHolder, SummaryItemUI>() {
+class SummaryAdapter(override var items: MutableList<SummaryUI> = mutableListOf(),
+                     private val uiMapper: UiMapper) :
+        DiffAdapter<SummaryHolder, SummaryUI>() {
 
-    override fun onBind(holder: ViewHolder, item: SummaryItemUI) {
-        holder.bind(item)
+    private object ViewTypes {
+        const val ITEM = 0
+        const val SEPARATOR = 1
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val layoutInflater = LayoutInflater.from(parent.context)
-        val itemBinding = SummaryItemBinding.inflate(layoutInflater, parent, false)
-        return ViewHolder(itemBinding)
-    }
-
-    class ViewHolder(private val binding: SummaryItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: SummaryItemUI) {
-            binding.name = item.name
-            binding.deadline = item.deadline
-            binding.done = item.isDone
-            binding.cbDone.setOnClickListener {
-                item.onClickDone()
-            }
-            binding.executePendingBindings()
+    override fun onBind(holder: SummaryHolder, item: SummaryUI) {
+        when (holder) {
+            is ItemHolder -> holder.bind(item as SummaryItemUI)
+            is HeaderHolder -> holder.bind(uiMapper, item as SummaryHeaderUI)
         }
     }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SummaryHolder {
+        val layoutInflater = LayoutInflater.from(parent.context)
+        return when (viewType) {
+            ViewTypes.ITEM -> ItemHolder(SummaryItemBinding.inflate(layoutInflater, parent, false))
+            else -> HeaderHolder(SummaryHeaderBinding.inflate(layoutInflater, parent, false))
+        }
+    }
+
+    override fun getItemViewType(position: Int) =
+            when (items[position]) {
+                is SummaryItemUI -> ViewTypes.ITEM
+                else -> ViewTypes.SEPARATOR
+            }
 }

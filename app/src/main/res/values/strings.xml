@@ -2,5 +2,7 @@
     <string name="app_name">Goal helper</string>
     <string name="my_objectives_title">My goals</string>
     <string name="navigation_drawer_header_title" translatable="false">Goal helper</string>
-
+    <string name="header_done_label" translatable="false">Done</string>
+    <string name="header_undone_label" translatable="false">Undone</string>
+    <string name="days_remaining_label">Days remaining:</string>
 </resources>
