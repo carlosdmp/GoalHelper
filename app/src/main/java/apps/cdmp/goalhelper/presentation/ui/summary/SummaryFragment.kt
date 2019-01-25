@@ -14,31 +14,29 @@ import apps.cdmp.goalHelper.databinding.SummaryFragmentBinding
 import apps.cdmp.goalhelper.presentation.ui.main.MainButtonLogo
 import apps.cdmp.goalhelper.presentation.ui.main.MainHosted
 import apps.cdmp.goalhelper.presentation.ui.main.MainViewModel
+import apps.cdmp.goalhelper.presentation.ui.summary.adapter.SummaryAdapter
+import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
-import apps.cdmp.goalhelper.presentation.ui.summary.adapter.SummaryAdapter
 
 
 class SummaryFragment : Fragment(), MainHosted {
 
-    private val summaryAdapter = SummaryAdapter()
-
-    override fun onFabClick() {
-        binding.summary.findNavController()
-            .navigate(SummaryFragmentDirections.actionSummaryFragmentToAddgoalFragment())
-    }
-
-    override fun onNavigationLanded() {
-        summaryViewModel.loadGoals()
-    }
-
-    private lateinit var binding: SummaryFragmentBinding
     private val summaryViewModel: SummaryViewModel by viewModel()
     private val mainViewModel: MainViewModel by sharedViewModel()
 
+    private val summaryAdapter: SummaryAdapter by inject()
+
+    private lateinit var binding: SummaryFragmentBinding
+
+    override fun onFabClick() {
+        binding.summary.findNavController()
+                .navigate(SummaryFragmentDirections.actionSummaryFragmentToAddgoalFragment())
+    }
+
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View {
         binding = SummaryFragmentBinding.inflate(inflater, container, false)
         return binding.root
@@ -47,10 +45,10 @@ class SummaryFragment : Fragment(), MainHosted {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         initRecyclerView()
-        mainViewModel.showFab(MainButtonLogo.DONE)
+        mainViewModel.showFab(MainButtonLogo.ADD)
         summaryViewModel.summaryGoalsUI.observe(this, Observer { goals ->
             goals?.let {
-                summaryAdapter.updateListItems(goals.undoneItemUIS + goals.doneItemUIS)
+                summaryAdapter.updateListItems(goals)
             }
         })
         summaryViewModel.loading.observe(this, Observer { isLoading ->
@@ -64,5 +62,4 @@ class SummaryFragment : Fragment(), MainHosted {
         binding.summaryRecyclerView.itemAnimator = DefaultItemAnimator()
         binding.summaryRecyclerView.adapter = summaryAdapter
     }
-
 }

@@ -14,15 +14,8 @@ sealed class Resource<T> {
 
 class Success<T>(val data: T) : Resource<T>()
 class Failure<T>(val error: Error) : Resource<T>()
-class Loading<T> : Resource<T>()
+class Loading<T>(val tempData:T?) : Resource<T>()
 
 fun <T> successWith(data: T) = Success(data)
 fun <T> errorFor(error: Error) = Failure<T>(error)
-fun <T> stillLoading() = Loading<T>()
-
-
-fun ee() {
-    successWith("Hola").fold({}, {}, {})
-    errorFor<String>(Error(Throwable()))
-    stillLoading<String>()
-}
+fun <T> stillLoading(tempData: T? = null) = Loading<T>(tempData)
